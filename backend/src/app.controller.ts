@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { join } from 'path';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { Request } from 'express';
+import { AuthRequest } from './auth/auth-request.interface';
 
 @Controller()
 export class AppController {
@@ -16,11 +16,11 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Get('test')
-  getProtected(@Req() request: Request) {
-    const user = request.user; // JWT에서 decode된 정보
+  getProtected(@Req() request: AuthRequest) {
+    const payload = request.payload; // JWT에서 decode된 정보
     return {
       message: 'This is a protected route',
-      user,
+      payload,
     };
   }
 }
