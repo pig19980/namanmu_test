@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FindUserDto {
   @IsString()
@@ -7,8 +7,12 @@ export class FindUserDto {
   @IsString()
   password: string;
 
-  constructor(username: string, password: string) {
+  @IsBoolean()
+  isHashed: boolean;
+
+  constructor(username: string, password: string, isHashed: boolean) {
     this.username = username;
     this.password = password;
+    this.isHashed = isHashed;
   }
 }
