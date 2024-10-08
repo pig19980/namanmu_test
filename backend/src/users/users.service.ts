@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
@@ -12,7 +12,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<boolean> {
     const oldUser: User = this.users.find((u) => u.username === createUserDto.username);
     if (oldUser) {
-      return false;
+      throw new ConflictException('이미 존재하는 사용자 이름입니다.');
     }
 
     const hashedPassword = await bcrpyt.hash(createUserDto.password, 10);
@@ -27,6 +27,7 @@ export class UsersService {
     if (!user) {
       return null;
     }
+
     if (isHashed && user.hashedPassword !== password) {
       return null;
     } else if (!isHashed && !(await bcrpyt.compare(password, user.hashedPassword))) {

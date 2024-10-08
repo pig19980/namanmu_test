@@ -10,17 +10,13 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: CreateUserDto) {
-    return this.authService.register(body);
+    console.log('regi start');
+    return await this.authService.register(body);
   }
 
   @Post('login')
   async login(@Body() body: FindUserDto) {
-    const user: User = await this.authService.validateUser(body.username, body.password);
-    if (!user) {
-      // todo: valid check를 authService.login 안에 넣기
-      throw new UnauthorizedException('Invalid credentials');
-      // return { message: 'Invalid credentials' };
-    }
-    return this.authService.login(user);
+    const user = await this.authService.validateUser(body.username, body.password);
+    return await this.authService.login(user);
   }
 }
