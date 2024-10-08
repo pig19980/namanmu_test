@@ -2,7 +2,7 @@ import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { FindUserDto } from './dto/find-user.dto';
+import { FindUserBeforeLoginDto } from './dto/find-user-before-login.dto';
 import { User } from './entities/user.entity';
 
 @Controller('users')
@@ -22,9 +22,8 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Body() body: FindUserDto) {
-    body.isHashed = false;
-    const user: User = await this.usersService.findUser(body);
+  async login(@Body() body: FindUserBeforeLoginDto) {
+    const user: User = await this.usersService.findUserBeforeLogin(body);
     if (user == null) {
       throw new UnauthorizedException('올바르지 않은 username 혹은 password입니다.');
     }
