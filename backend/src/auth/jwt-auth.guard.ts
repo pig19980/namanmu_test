@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from './payload.interface';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -16,8 +17,8 @@ export class JwtAuthGuard implements CanActivate {
     const token = authHeader.split(' ')[1];
     try {
       const decoded = this.jwtService.verify(token);
-      console.log(decoded);
-      request.user = decoded; // 필요한 정보를 request 객체에 추가
+      const { username, hashedPassword }: Payload = decoded;
+      request.payload = { username, hashedPassword };
       return true;
     } catch (err) {
       throw new ForbiddenException('JWT 토큰이 올바르지 않습니다.');

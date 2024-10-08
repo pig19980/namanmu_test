@@ -12,18 +12,4 @@ export class AuthService {
     const { username, hashedPassword }: Payload = user;
     return this.jwtService.sign({ username, hashedPassword });
   }
-
-  async login(user: User) {
-    const payload: Payload = {
-      username: user.username,
-      hashedPassword: user.hashedPassword,
-    };
-    return {
-      data: {
-        darkMode: user.darkMode,
-        jwtToken: this.jwtService.sign(payload),
-      },
-      message: '로그인 성공',
-    };
-  }
 }
