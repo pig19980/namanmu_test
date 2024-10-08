@@ -4,7 +4,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { FindUserDto } from 'src/users/dto/find-user.dto';
 import { User } from 'src/users/entities/user.entity';
 
-@Controller('auth')
+@Controller('users')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
