@@ -22,15 +22,15 @@ export class UsersService {
     return true;
   }
 
-  async findUser(username: string, password: string, isHashed: boolean): Promise<User> {
-    const user: User = this.users.find((u) => u.username === username);
+  async findUser(findUserDto: FindUserDto): Promise<User> {
+    const user: User = this.users.find((u) => u.username === findUserDto.username);
     if (!user) {
       return null;
     }
 
-    if (isHashed && user.hashedPassword !== password) {
+    if (findUserDto.isHashed && user.hashedPassword !== findUserDto.password) {
       return null;
-    } else if (!isHashed && !(await bcrpyt.compare(password, user.hashedPassword))) {
+    } else if (!findUserDto.isHashed && !(await bcrpyt.compare(findUserDto.password, user.hashedPassword))) {
       return null;
     }
     return user;

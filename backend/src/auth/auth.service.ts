@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, password: string): Promise<User> {
-    const user: User = await this.usersService.findUser(username, password, false);
+    const user: User = await this.usersService.findUser({ username, password, isHashed: false });
     if (!user) {
       throw new UnauthorizedException('올바르지 않은 username 혹은 password입니다.');
     }
