@@ -9,18 +9,29 @@ import * as bcrpyt from 'bcryptjs';
 export class UsersService {
   private users: User[] = [];
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<boolean> {
+    const oldUser: User = this.users.find((u) => u.username === createUserDto.username);
+    if (oldUser) {
+      return false;
+    }
+
     const hashedPassword = await bcrpyt.hash(createUserDto.password, 10);
     const user = new User(createUserDto.username, hashedPassword);
     this.users.push(user);
+    console.log(this.users);
+    return true;
   }
 
-  async findOne(username: string, password: string) {
+  async findUser(username: string, password: string, isHashed: boolean): Promise<User> {
     const user: User = this.users.find((u) => u.username === username);
-    if (user && (await bcrpyt.compare(password, user.hashedPassword))) {
-      return user;
-    } else {
+    if (!user) {
       return null;
     }
+    if (isHashed && user.hashedPassword !== password) {
+      return null;
+    } else if (!isHashed && !(await bcrpyt.compare(password, user.hashedPassword))) {
+      return null;
+    }
+    return user;
   }
 }
