@@ -13,10 +13,9 @@ import { JwtAuthGuard } from './jwt-auth.guard';
       secret: 'mySecretKey',
       signOptions: { expiresIn: '60s' },
     }),
-    UsersModule,
   ],
   providers: [AuthService, JwtAuthGuard],
   controllers: [AuthController],
-  exports: [JwtAuthGuard, JwtModule],
+  exports: [JwtAuthGuard, JwtModule, AuthService],
 })
 export class AuthModule {}
