@@ -27,10 +27,24 @@ function closeRegister() {
   registerModal.style.display = "none";
 }
 
-// 이 부분은 register.html이 로드되기 전에 실행되므로 오류 발생 가능성 있음
-const openRegisterModal = document.querySelector(".btn-register-modal");
-if (openRegisterModal) {
-  openRegisterModal.onclick = openRegister;
-} else {
-  console.log("회원가입 버튼을 찾을 수 없습니다.");
+
+// 회원가입 버튼 누른 후
+
+function userRegister() {
+  const userRegisterId = document.querySelector(".user-register-id");
+  const userRegisterPassWord = document.querySelector(".user-register-password");
+  fetch("/users/register", {
+    method: "POST",
+    headers: {
+      'Content-Type' : 'application/json'
+    },
+    body: JSON.stringify({
+      username: userRegisterId.value,
+      password: userRegisterPassWord.value,
+    })
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(error => console.log('Error', error));
 }
+
