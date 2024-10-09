@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { Comment } from 'src/comments/entities/comment.entity';
+import { Comment, CommentSend } from 'src/comments/entities/comment.entity';
 
 @Entity()
 export class Post {
@@ -37,4 +37,9 @@ export interface PostSend {
   createdAt: Date;
   likes: number;
   imageURL: string;
+}
+
+export interface PostViewSend {
+  Post: PostSend;
+  Comments: CommentSend[];
 }

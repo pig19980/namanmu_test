@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { _CreatePostDto, CreatePostDto } from './dto/create-post.dto';
-import { PostSend } from './entities/post.entity';
+import { PostSend, PostViewSend } from './entities/post.entity';
 import { Post as _Post } from './entities/post.entity';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -49,7 +49,7 @@ export class PostsController {
 
   @Get()
   async findAll() {
-    const postSends: PostSend[] = await this.postsService.findAll();
+    const postSends: PostSend[] = await this.postsService.findAllResponse();
     console.log(postSends);
 
     return {
@@ -63,13 +63,11 @@ export class PostsController {
   @Post('view')
   async viewComments(@Body() viewCommentsDto: ViewCommentsDto) {
     const id: number = viewCommentsDto.id;
-    const commentSends: CommentSend[] = await this.postsService.findAllComments(id);
-    console.log(commentSends);
+    const postViewSend: PostViewSend = await this.postsService.findAllCommentsResponse(id);
+    console.log(postViewSend);
 
     return {
-      data: {
-        Comments: commentSends,
-      },
+      data: postViewSend,
       message: '게시물 확대 성공',
     };
   }
@@ -89,13 +87,11 @@ export class PostsController {
     if (!(await this.commentsService.create({ commentCreator, commentPostedAt, content }))) {
       throw new BadRequestException('게시물 작성 실패');
     }
-    const commentSends: CommentSend[] = await this.postsService.findAllComments(id);
-    console.log(commentSends);
+    const postViewSend: PostViewSend = await this.postsService.findAllCommentsResponse(id);
+    console.log(postViewSend);
 
     return {
-      data: {
-        Comments: commentSends,
-      },
+      data: postViewSend,
       message: '댓글 확대 성공',
     };
   }
