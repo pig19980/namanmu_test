@@ -1,4 +1,13 @@
-import { Controller, Get, Req, Post, Body, UseGuards, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Post,
+  Body,
+  UseGuards,
+  BadRequestException,
+  NotImplementedException,
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostSend } from './entities/post.entity';
@@ -29,7 +38,12 @@ export class PostsController {
       throw new BadRequestException('옳지 않은 JWT 요청');
     }
     body.createdUserId = user.id;
-    return this.postsService.create(body);
+    if (!this.postsService.create(body)) {
+      throw new NotImplementedException('게시물 작성 실패');
+    }
+    let response = await this.findAll();
+    response['message'] = '게시물 작성 성공';
+    return response;
   }
 
   @Get()
