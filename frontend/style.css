@@ -48,7 +48,7 @@
 
 .card-modal {
   position: absolute;
-  display: none;
+  display: flex;
 
   justify-content: center;
   top: 0;
