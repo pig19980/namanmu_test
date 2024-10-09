@@ -89,11 +89,10 @@
     <script src="cardmodal/cardmodal.js"></script>
     <script src="register/register.js"></script>
 
-    <script>
+    <!-- <script>
         showArticles();
 
         function showArticles() {
-            document.querySelector(".card").empty()
             fetch("/posts")
                 .then((res) => res.json())
                 .then((data) => {
@@ -125,7 +124,7 @@
             //메인 페이지에 db에서 받아온 정보로 게시글 생성.
             document.querySelector(".card").innerHTML = temp_html;
         }
-    </script>
+    </script> -->
 </body>
 
 </html>

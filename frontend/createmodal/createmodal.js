@@ -32,14 +32,13 @@ function createPost() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer <your_jwt_token>",
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     },
     body: JSON.stringify({
       title: uploadTitleText.value,
       content: uploadContentText.value,
     }),
   })
-    // 나중에 token예외처리 해줄예정 반응은 나중에 할 예정.
     .then((res) => res.json())
     .then((data) => console.log(data));
 }

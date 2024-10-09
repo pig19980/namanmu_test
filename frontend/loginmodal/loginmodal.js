@@ -42,8 +42,8 @@ function userLogin() {
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data.jwtToken) {
-        localStorage.setItem("jwtToken", data.jwtToken);
+      if (data.data.jwtToken) {
+        localStorage.setItem("jwtToken", data.data.jwtToken);
         alert(data.message);
       } else {
         alert(data.message);
