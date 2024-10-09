@@ -12,8 +12,8 @@ export class PostsService {
     private postRepository: Repository<Post>,
   ) {}
 
-  async create({ createdUserId, title, content }: CreatePostDto): Promise<boolean> {
-    const post = this.postRepository.create({ createdUserId, title, content });
+  async create({ postCreator, title, content }: CreatePostDto): Promise<boolean> {
+    const post = this.postRepository.create({ postCreator, title, content });
     await this.postRepository.save(post);
 
     console.log(post);
@@ -21,12 +21,12 @@ export class PostsService {
   }
 
   async findAll(): Promise<PostSend[]> {
-    const posts: Post[] = await this.postRepository.find();
+    const posts: Post[] = await this.postRepository.find({ relations: ['postCreator'] });
 
     return await Promise.all(
       posts.map(async (post) => ({
         id: post.id,
-        createdUsername: await this.usersService.getUserName(post.createdUserId),
+        createdUsername: post.postCreator.username,
         title: post.title,
         content: post.content,
         createdAt: post.createdAt,

@@ -1,12 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  createdUserId: number;
+  @ManyToOne(() => User, (user) => user.createdPosts)
+  postCreator: User;
 
   @Column({ length: 255, nullable: false })
   title: string;

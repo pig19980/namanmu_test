@@ -29,16 +29,16 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  async create(@Body() body: CreatePostDto, @Req() request: AuthRequest) {
+  async create(@Body() createPostDto: CreatePostDto, @Req() request: AuthRequest) {
     const payload: Payload = request.payload;
-    console.log(payload);
     const findUserAfterLoginDto: FindUserAfterLoginDto = payload;
-    const user: User = await this.usersService.findUserAfterLogin(findUserAfterLoginDto);
-    if (user == null) {
+    const postCreator: User = await this.usersService.findUserAfterLogin(findUserAfterLoginDto);
+    if (postCreator == null) {
       throw new BadRequestException('옳지 않은 JWT 요청');
     }
-    body.createdUserId = user.id;
-    if (!(await this.postsService.create(body))) {
+
+    createPostDto.postCreator = postCreator;
+    if (!(await this.postsService.create(createPostDto))) {
       throw new NotImplementedException('게시물 작성 실패');
     }
     let response = await this.findAll();
