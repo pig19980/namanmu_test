@@ -29,7 +29,7 @@ const loginButton = document.querySelector(".btn-login");
 function userLogin() {
   const userId = document.querySelector(".userid");
   const userPassWord = document.querySelector(".password");
-  
+
   fetch("users/login", {
     method: "POST",
     headers: {
@@ -43,7 +43,7 @@ function userLogin() {
     .then((res) => res.json())
     .then((data) => {
       if (data.jwtToken) {
-        localStorage.setItem('jwtToken', data.jwtToken);
+        localStorage.setItem("jwtToken", data.jwtToken);
         alert(data.message);
       } else {
         alert(data.message);
