@@ -1,29 +1,33 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindUserBeforeLoginDto } from './dto/find-user-before-login.dto';
 import { User } from './entities/user.entity';
 import * as bcrpyt from 'bcryptjs';
 import { FindUserAfterLoginDto } from './dto/find-user-after-login.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  constructor(
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
+  ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<boolean> {
-    const oldUser: User = this.users.find((u) => u.username === createUserDto.username);
+  async create({ username, password }: CreateUserDto): Promise<boolean> {
+    let oldUser: User = await this.userRepository.findOne({ where: { username } });
     if (oldUser) {
       throw new ConflictException('이미 존재하는 사용자 이름입니다.');
     }
 
-    const hashedPassword = await bcrpyt.hash(createUserDto.password, 10);
-    const user = new User(createUserDto.username, hashedPassword);
-    this.users.push(user);
-    console.log(this.users);
+    const hashedPassword = await bcrpyt.hash(password, 10);
+    let user: User = this.userRepository.create({ username, hashedPassword, darkMode: false });
+    await this.userRepository.save(user);
+
     return true;
   }
 
   async find(username: string): Promise<User> {
-    return this.users.find((u) => u.username === username);
+    return this.userRepository.findOne({ where: { username } });
   }
 
   async findUserBeforeLogin(findUserBeforeLoginDto: FindUserBeforeLoginDto): Promise<User> {
@@ -43,6 +47,7 @@ export class UsersService {
   }
 
   async getUserName(userId: number): Promise<string> {
-    return this.users[userId].username;
+    const user: User = await this.userRepository.findOne({ where: { id: userId } });
+    return user.username;
   }
 }
