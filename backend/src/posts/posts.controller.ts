@@ -30,9 +30,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Body() createPostDto: CreatePostDto, @Req() request: AuthRequest) {
-    const payload: Payload = request.payload;
-    const findUserAfterLoginDto: FindUserAfterLoginDto = payload;
-    const postCreator: User = await this.usersService.findUserAfterLogin(findUserAfterLoginDto);
+    const postCreator: User = request.user;
     if (postCreator == null) {
       throw new BadRequestException('옳지 않은 JWT 요청');
     }
