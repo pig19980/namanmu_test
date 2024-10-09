@@ -36,14 +36,12 @@ function openCard(card_id) {
     .then((res) => res.json())
     .then((data) => {
       const cards = data.data.Comments;
-      for (let i = 0; i < cards.length; i++) {
-        
-      }
+      makeCardDetail(cards["id"], cards["createdUsername"], cards["title"], cards["content"], cards["createdAt"], cards["likes"], cards["imageURL"])
     });
 }
-function makeCardDetail(id, createdUsername, content, createdAt, likes) {
+function makeCardDetail(card_id, createdUsername, title, content, createdAt, likes, imageURL) {
   let temp_html = `<div class="post-card">
-            <div class="post-text" onclick = openCard(${id})>
+            <div class="post-text" onclick = openCard(${card_id})>
                 <h5>${createdUsername}</h5>
                 <h3>${title}</h3>
                 <h6>${content}</h6>
@@ -56,4 +54,5 @@ function makeCardDetail(id, createdUsername, content, createdAt, likes) {
                 <img src="${imageURL}" width=100% height=100%>
             </div>
         </div>`;
+    document.querySelector(".card-modal").innerHTML += temp_html;
 }
