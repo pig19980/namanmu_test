@@ -20,6 +20,9 @@ export class Post {
 
   @Column({ default: 0 })
   likes: number;
+
+  @Column()
+  imageURL: string;
 }
 
 export interface PostSend {

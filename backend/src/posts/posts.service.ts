@@ -4,6 +4,10 @@ import { UsersService } from 'src/users/users.service';
 import { Post, PostSend } from './entities/post.entity';
 import { Repository } from 'typeorm';
 
+function getRandomInt(): number {
+  return Math.floor(Math.random() * 2);
+}
+
 @Injectable()
 export class PostsService {
   constructor(
@@ -13,7 +17,7 @@ export class PostsService {
   ) {}
 
   async create({ postCreator, title, content }: CreatePostDto): Promise<boolean> {
-    const post = this.postRepository.create({ postCreator, title, content });
+    const post = this.postRepository.create({ postCreator, title, content, imageURL: `img/${getRandomInt()}.jpg` });
     await this.postRepository.save(post);
 
     console.log(post);
@@ -31,7 +35,7 @@ export class PostsService {
         content: post.content,
         createdAt: post.createdAt,
         likes: post.likes,
-        imageURL: 'not maid image DB',
+        imageURL: post.imageURL,
       })),
     );
   }
