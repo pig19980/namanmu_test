@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class FindUserBeforeLoginDto {
   @IsString()

@@ -8,9 +8,10 @@ export class PostsService {
   constructor(private readonly usersService: UsersService) {}
   private posts: Post[] = [];
 
-  create(createPostDto: CreatePostDto) {
+  create(createPostDto: CreatePostDto): boolean {
     const post = new Post(createPostDto.createdUserId, createPostDto.title, createPostDto.content);
     this.posts.push(post);
+    return true;
   }
 
   async findAll(): Promise<PostSend[]> {
