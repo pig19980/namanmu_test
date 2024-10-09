@@ -14,15 +14,16 @@ export class UsersService {
   ) {}
 
   async create({ username, password }: CreateUserDto): Promise<boolean> {
-    let oldUser: User = await this.userRepository.findOne({ where: { username } });
+    const oldUser: User = await this.userRepository.findOne({ where: { username } });
     if (oldUser) {
       throw new ConflictException('이미 존재하는 사용자 이름입니다.');
     }
 
     const hashedPassword = await bcrpyt.hash(password, 10);
-    let user: User = this.userRepository.create({ username, hashedPassword, darkMode: false });
+    const user: User = this.userRepository.create({ username, hashedPassword, darkMode: false });
     await this.userRepository.save(user);
 
+    console.log(user);
     return true;
   }
 

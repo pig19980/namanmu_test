@@ -1,22 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UsersService } from 'src/users/users.service';
 import { Post, PostSend } from './entities/post.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly usersService: UsersService) {}
-  private posts: Post[] = [];
+  constructor(
+    private readonly usersService: UsersService,
+    @Inject('POST_REPOSITORY')
+    private postRepository: Repository<Post>,
+  ) {}
 
-  create(createPostDto: CreatePostDto): boolean {
-    const post = new Post(createPostDto.createdUserId, createPostDto.title, createPostDto.content);
-    this.posts.push(post);
+  async create({ createdUserId, title, content }: CreatePostDto): Promise<boolean> {
+    const post = this.postRepository.create({ createdUserId, title, content });
+    await this.postRepository.save(post);
+
+    console.log(post);
     return true;
   }
 
   async findAll(): Promise<PostSend[]> {
+    const posts: Post[] = await this.postRepository.find();
+
     return await Promise.all(
-      this.posts.map(async (post) => ({
+      posts.map(async (post) => ({
         id: post.id,
         createdUsername: await this.usersService.getUserName(post.createdUserId),
         title: post.title,

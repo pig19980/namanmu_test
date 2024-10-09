@@ -38,7 +38,7 @@ export class PostsController {
       throw new BadRequestException('옳지 않은 JWT 요청');
     }
     body.createdUserId = user.id;
-    if (!this.postsService.create(body)) {
+    if (!(await this.postsService.create(body))) {
       throw new NotImplementedException('게시물 작성 실패');
     }
     let response = await this.findAll();

@@ -1,21 +1,24 @@
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+
+@Entity()
 export class Post {
-  private static currentId = 0;
-
+  @PrimaryGeneratedColumn()
   id: number;
-  createdUserId: number;
-  title: string;
-  content: string;
-  createdAt: Date;
-  likes: number;
 
-  constructor(createdUserId: number, title: string, content: string) {
-    this.id = Post.currentId++;
-    this.createdUserId = createdUserId;
-    this.title = title;
-    this.content = content;
-    this.createdAt = new Date();
-    this.likes = 0;
-  }
+  @Column()
+  createdUserId: number;
+
+  @Column({ length: 255, nullable: false })
+  title: string;
+
+  @Column('text')
+  content: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column({ default: 0 })
+  likes: number;
 }
 
 export interface PostSend {
