@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Post, Body, UseGuards, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Req, Post, Body, UseGuards, BadRequestException } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostSend } from './entities/post.entity';

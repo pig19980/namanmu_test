@@ -1,5 +1,4 @@
-import { isByteLength, IsNotEmpty, IsNumber, IsOptional, isString, IsString } from 'class-validator';
-import { use } from 'passport';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
