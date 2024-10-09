@@ -3,7 +3,7 @@ import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
-import { PostProviders } from './entities/post.providers.ts';
+import { PostProviders } from './entities/post.providers';
 import { DatabaseModule } from 'src/database/database.module';
 
 @Module({

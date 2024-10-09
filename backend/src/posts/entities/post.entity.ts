@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 @Entity()
 export class Post {
@@ -8,6 +9,9 @@ export class Post {
 
   @ManyToOne(() => User, (user) => user.createdPosts)
   postCreator: User;
+
+  @OneToMany(() => Comment, (comment) => comment.commentPostedAt)
+  postComments: Comment[];
 
   @Column({ length: 255, nullable: false })
   title: string;

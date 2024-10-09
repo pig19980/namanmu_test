@@ -6,9 +6,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { StaticPageModule } from './static-page.module';
 import { DatabaseModule } from './database/database.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
-  imports: [AuthModule, PostsModule, UsersModule, StaticPageModule, DatabaseModule],
+  imports: [AuthModule, PostsModule, UsersModule, StaticPageModule, DatabaseModule, CommentsModule],
   controllers: [AppController],
   providers: [AppService],
 })
