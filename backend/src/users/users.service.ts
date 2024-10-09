@@ -27,12 +27,12 @@ export class UsersService {
     return true;
   }
 
-  async find(username: string): Promise<User> {
+  async findByUsername(username: string): Promise<User> {
     return this.userRepository.findOne({ where: { username } });
   }
 
   async findUserBeforeLogin({ username, password }: FindUserBeforeLoginDto): Promise<User> {
-    const user: User = await this.find(username);
+    const user: User = await this.findByUsername(username);
     if (!user || !(await bcrpyt.compare(password, user.hashedPassword))) {
       return null;
     }
@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   async findUserAfterLogin({ username, hashedPassword }: FindUserAfterLoginDto): Promise<User> {
-    const user: User = await this.find(username);
+    const user: User = await this.findByUsername(username);
     if (!user || user.hashedPassword !== hashedPassword) {
       return null;
     }

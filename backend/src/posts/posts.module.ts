@@ -10,5 +10,6 @@ import { DatabaseModule } from 'src/database/database.module';
   imports: [AuthModule, UsersModule, DatabaseModule],
   controllers: [PostsController],
   providers: [PostsService, ...PostProviders],
+  exports: [PostsService],
 })
 export class PostsModule {}

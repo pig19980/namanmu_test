@@ -1,21 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { _CreateCommentDto } from './dto/create-comment.dto';
+import { PostsService } from 'src/posts/posts.service';
+import { Post } from '@nestjs/common';
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  async create(_createCommentDto: _CreateCommentDto): Promise<boolean> {
+    return true;
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all comments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
   }
 }

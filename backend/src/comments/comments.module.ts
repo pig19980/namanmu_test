@@ -5,9 +5,10 @@ import { CommentProviders } from './entities/comment.providers';
 import { UsersModule } from 'src/users/users.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { DatabaseModule } from 'src/database/database.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [UsersModule, PostsModule, DatabaseModule],
+  imports: [AuthModule, UsersModule, PostsModule, DatabaseModule],
   controllers: [CommentsController],
   providers: [CommentsService, ...CommentProviders],
 })

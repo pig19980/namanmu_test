@@ -24,6 +24,10 @@ export class PostsService {
     return true;
   }
 
+  async findById(id: number): Promise<Post> {
+    return this.postRepository.findOne({ where: { id } });
+  }
+
   async findAll(): Promise<PostSend[]> {
     const posts: Post[] = await this.postRepository.find({ relations: ['postCreator'] });
 
