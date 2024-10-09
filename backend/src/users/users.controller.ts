@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, forwardRef, Inject, Post, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -9,12 +9,12 @@ import { User } from './entities/user.entity';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
   ) {}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
-    console.log('regi start');
     await this.usersService.create(createUserDto);
     return {
       message: '회원가입 성공',

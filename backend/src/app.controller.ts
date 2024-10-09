@@ -17,10 +17,10 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('test')
   getProtected(@Req() request: AuthRequest) {
-    const payload = request.payload; // JWT에서 decode된 정보
+    const user = request.user; // JWT에서 decode된 정보
     return {
       message: 'This is a protected route',
-      payload,
+      user,
     };
   }
 }

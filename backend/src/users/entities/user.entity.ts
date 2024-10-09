@@ -1,15 +1,24 @@
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Post } from 'src/posts/entities/post.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
+
+@Entity()
 export class User {
-  private static currentId = 0;
-
+  @PrimaryGeneratedColumn()
   id: number;
-  username: string;
-  hashedPassword: string;
-  darkMode: boolean;
 
-  constructor(username: string, hashedPassword: string) {
-    this.id = User.currentId++;
-    this.username = username;
-    this.hashedPassword = hashedPassword;
-    this.darkMode = false;
-  }
+  @OneToMany(() => Post, (post) => post.postCreator)
+  createdPosts: Post[];
+
+  @OneToMany(() => Comment, (comment) => comment.commentCreator)
+  createdComments: Comment[];
+
+  @Column({ length: 500, nullable: false })
+  username: string;
+
+  @Column({ length: 500, nullable: false })
+  hashedPassword: string;
+
+  @Column({ nullable: false })
+  darkMode: boolean;
 }

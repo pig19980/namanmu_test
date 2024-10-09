@@ -1,21 +1,32 @@
-export class Post {
-  private static currentId = 0;
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Comment, CommentSend } from 'src/comments/entities/comment.entity';
 
+@Entity()
+export class Post {
+  @PrimaryGeneratedColumn()
   id: number;
-  createdUserId: number;
+
+  @ManyToOne(() => User, (user) => user.createdPosts)
+  postCreator: User;
+
+  @OneToMany(() => Comment, (comment) => comment.commentPostedAt)
+  postComments: Comment[];
+
+  @Column({ length: 255, nullable: false })
   title: string;
+
+  @Column('text')
   content: string;
+
+  @CreateDateColumn()
   createdAt: Date;
+
+  @Column({ default: 0 })
   likes: number;
 
-  constructor(createdUserId: number, title: string, content: string) {
-    this.id = Post.currentId++;
-    this.createdUserId = createdUserId;
-    this.title = title;
-    this.content = content;
-    this.createdAt = new Date();
-    this.likes = 0;
-  }
+  @Column()
+  imageURL: string;
 }
 
 export interface PostSend {
@@ -26,4 +37,9 @@ export interface PostSend {
   createdAt: Date;
   likes: number;
   imageURL: string;
+}
+
+export interface PostViewSend {
+  Post: PostSend;
+  Comments: CommentSend[];
 }
