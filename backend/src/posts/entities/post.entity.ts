@@ -20,9 +20,10 @@ export class Post {
 
 export interface PostSend {
   id: number;
-  username: string;
+  createdUsername: string;
   title: string;
   content: string;
   createdAt: Date;
   likes: number;
+  imageURL: string;
 }

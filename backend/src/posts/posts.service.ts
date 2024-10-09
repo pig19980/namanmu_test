@@ -17,11 +17,12 @@ export class PostsService {
     return await Promise.all(
       this.posts.map(async (post) => ({
         id: post.id,
-        username: await this.usersService.getUserName(post.createdUserId),
+        createdUsername: await this.usersService.getUserName(post.createdUserId),
         title: post.title,
         content: post.content,
         createdAt: post.createdAt,
         likes: post.likes,
+        imageURL: 'not maid image DB',
       })),
     );
   }
