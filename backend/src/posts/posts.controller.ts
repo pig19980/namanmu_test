@@ -9,7 +9,7 @@ import {
   NotImplementedException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
+import { _CreatePostDto, CreatePostDto } from './dto/create-post.dto';
 import { PostSend } from './entities/post.entity';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -37,8 +37,8 @@ export class PostsController {
       throw new BadRequestException('옳지 않은 JWT 요청');
     }
 
-    createPostDto.postCreator = postCreator;
-    if (!(await this.postsService.create(createPostDto))) {
+    const _createPostDto: _CreatePostDto = { ...createPostDto, postCreator };
+    if (!(await this.postsService.create(_createPostDto))) {
       throw new NotImplementedException('게시물 작성 실패');
     }
     let response = await this.findAll();

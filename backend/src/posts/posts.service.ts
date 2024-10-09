@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
+import { _CreatePostDto } from './dto/create-post.dto';
 import { UsersService } from 'src/users/users.service';
 import { Post, PostSend } from './entities/post.entity';
 import { Repository } from 'typeorm';
@@ -16,7 +16,7 @@ export class PostsService {
     private postRepository: Repository<Post>,
   ) {}
 
-  async create({ postCreator, title, content }: CreatePostDto): Promise<boolean> {
+  async create({ postCreator, title, content }: _CreatePostDto): Promise<boolean> {
     const post = this.postRepository.create({ postCreator, title, content, imageURL: `img/${getRandomInt()}.jpg` });
     await this.postRepository.save(post);
 
