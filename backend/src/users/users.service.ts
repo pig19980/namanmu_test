@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { FindUserDto } from './dto/find-user.dto';
+import { FindUserBeforeLoginDto } from './dto/find-user-before-login.dto';
 import { User } from './entities/user.entity';
 import * as bcrpyt from 'bcryptjs';
+import { FindUserAfterLoginDto } from './dto/find-user-after-login.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,17 +22,27 @@ export class UsersService {
     return true;
   }
 
-  async findUser(findUserDto: FindUserDto): Promise<User> {
-    const user: User = this.users.find((u) => u.username === findUserDto.username);
-    if (!user) {
-      return null;
-    }
+  async find(username: string): Promise<User> {
+    return this.users.find((u) => u.username === username);
+  }
 
-    if (findUserDto.isHashed && user.hashedPassword !== findUserDto.password) {
-      return null;
-    } else if (!findUserDto.isHashed && !(await bcrpyt.compare(findUserDto.password, user.hashedPassword))) {
+  async findUserBeforeLogin(findUserBeforeLoginDto: FindUserBeforeLoginDto): Promise<User> {
+    const user: User = await this.find(findUserBeforeLoginDto.username);
+    if (!user || !(await bcrpyt.compare(findUserBeforeLoginDto.password, user.hashedPassword))) {
       return null;
     }
     return user;
+  }
+
+  async findUserAfterLogin(findUserAfterLogin: FindUserAfterLoginDto): Promise<User> {
+    const user: User = await this.find(findUserAfterLogin.username);
+    if (!user || user.hashedPassword !== findUserAfterLogin.hashedPassword) {
+      return null;
+    }
+    return user;
+  }
+
+  async getUserName(userId: number): Promise<string> {
+    return this.users[userId].username;
   }
 }

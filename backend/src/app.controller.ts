@@ -1,7 +1,9 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { join } from 'path';
 import { AppService } from './app.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { AuthRequest } from './auth/auth-request.interface';
 
 @Controller()
 export class AppController {
@@ -12,8 +14,13 @@ export class AppController {
     res.sendFile(join(__dirname, '../../frontend', 'index.html'));
   }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @UseGuards(JwtAuthGuard)
+  @Get('test')
+  getProtected(@Req() request: AuthRequest) {
+    const payload = request.payload; // JWT에서 decode된 정보
+    return {
+      message: 'This is a protected route',
+      payload,
+    };
   }
 }

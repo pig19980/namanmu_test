@@ -1,18 +1,14 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class FindUserDto {
+export class FindUserBeforeLoginDto {
   @IsString()
   username: string;
 
   @IsString()
   password: string;
 
-  @IsBoolean()
-  isHashed: boolean;
-
-  constructor(username: string, password: string, isHashed: boolean) {
+  constructor(username: string, password: string) {
     this.username = username;
     this.password = password;
-    this.isHashed = isHashed;
   }
 }

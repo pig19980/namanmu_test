@@ -1,14 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UsersService } from 'src/users/users.service';
+import { Post, PostSend } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
-  private posts = [];
+  constructor(private readonly usersService: UsersService) {}
+  private posts: Post[] = [];
 
-  create(post: any) {
+  create(createPostDto: CreatePostDto) {
+    const post = new Post(createPostDto.createdUserId, createPostDto.title, createPostDto.content);
     this.posts.push(post);
   }
 
-  findAll() {
-    return this.posts;
+  async findAll(): Promise<PostSend[]> {
+    return await Promise.all(
+      this.posts.map(async (post) => ({
+        id: post.id,
+        username: await this.usersService.getUserName(post.createdUserId),
+        title: post.title,
+        content: post.content,
+        createdAt: post.createdAt,
+        likes: post.likes,
+      })),
+    );
   }
 }
