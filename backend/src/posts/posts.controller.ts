@@ -74,7 +74,8 @@ export class PostsController {
     };
   }
 
-  @Post()
+  @UseGuards(JwtAuthGuard)
+  @Post('comment')
   async createComment(@Body() createCommentDto: CreateCommentDto, @Req() request: AuthRequest) {
     const commentCreator: User = request.user;
     if (commentCreator == null) {
