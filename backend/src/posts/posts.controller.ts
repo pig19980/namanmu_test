@@ -16,14 +16,19 @@ import { Post as _Post } from './entities/post.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthRequest } from 'src/auth/auth-request.interface';
 
-import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { ViewCommentsDto } from './dto/view-comments.dto';
 import { CommentSend } from 'src/comments/entities/comment.entity';
+import { CreateCommentDto } from './dto/create-comment.dto';
+
+import { CommentsService } from 'src/comments/comments.service';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly commentsService: CommentsService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -66,6 +71,31 @@ export class PostsController {
         Comments: commentSends,
       },
       message: '게시물 확대 성공',
+    };
+  }
+
+  @Post()
+  async createComment(@Body() createCommentDto: CreateCommentDto, @Req() request: AuthRequest) {
+    const commentCreator: User = request.user;
+    if (commentCreator == null) {
+      throw new BadRequestException('옳지 않은 JWT 요청');
+    }
+    const { id, content } = { ...createCommentDto };
+    const commentPostedAt: _Post = await this.postsService.findById(id);
+    if (commentPostedAt == null) {
+      throw new BadRequestException('존재하지 않은 게시물 id');
+    }
+    if (!(await this.commentsService.create({ commentCreator, commentPostedAt, content }))) {
+      throw new BadRequestException('게시물 작성 실패');
+    }
+    const commentSends: CommentSend[] = await this.postsService.findAllComments(id);
+    console.log(commentSends);
+
+    return {
+      data: {
+        Comments: commentSends,
+      },
+      message: '댓글 확대 성공',
     };
   }
 }
