@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotImplementedException } from '@nestjs/common';
 import { _CreatePostDto } from './dto/create-post.dto';
 import { UsersService } from 'src/users/users.service';
 import { Post, PostSend } from './entities/post.entity';
 import { Repository } from 'typeorm';
+import { Comment, CommentSend } from 'src/comments/entities/comment.entity';
 
 function getRandomInt(): number {
   return Math.floor(Math.random() * 2);
@@ -40,6 +41,27 @@ export class PostsService {
         createdAt: post.createdAt,
         likes: post.likes,
         imageURL: post.imageURL,
+      })),
+    );
+  }
+
+  async findAllComments(id: number): Promise<CommentSend[]> {
+    const post: Post = await this.postRepository.findOne({
+      where: { id },
+      relations: ['postComments', 'postComments.commentCreator'],
+    });
+    if (post == null) {
+      throw new NotImplementedException('게시물 찾기 실패');
+    }
+    const comments: Comment[] = post.postComments;
+
+    return await Promise.all(
+      comments.map(async (comment) => ({
+        id: comment.id,
+        createdUsername: comment.commentCreator.username,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        likes: comment.likes,
       })),
     );
   }

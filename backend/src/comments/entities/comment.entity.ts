@@ -22,3 +22,11 @@ export class Comment {
   @Column({ default: 0 })
   likes: number;
 }
+
+export interface CommentSend {
+  id: number;
+  createdUsername: string;
+  content: string;
+  createdAt: Date;
+  likes: number;
+}

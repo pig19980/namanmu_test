@@ -11,21 +11,19 @@ import {
 import { PostsService } from './posts.service';
 import { _CreatePostDto, CreatePostDto } from './dto/create-post.dto';
 import { PostSend } from './entities/post.entity';
+import { Post as _Post } from './entities/post.entity';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Payload } from 'src/auth/payload.interface';
 import { AuthRequest } from 'src/auth/auth-request.interface';
 
-import { FindUserAfterLoginDto } from 'src/users/dto/find-user-after-login.dto';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
+import { ViewCommentsDto } from './dto/view-comments.dto';
+import { CommentSend } from 'src/comments/entities/comment.entity';
 
 @Controller('posts')
 export class PostsController {
-  constructor(
-    private readonly postsService: PostsService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -54,6 +52,20 @@ export class PostsController {
         Posts: postSends,
       },
       message: '게시물 조회 성공',
+    };
+  }
+
+  @Post('view')
+  async viewComments(@Body() viewCommentsDto: ViewCommentsDto) {
+    const id: number = viewCommentsDto.id;
+    const commentSends: CommentSend[] = await this.postsService.findAllComments(id);
+    console.log(commentSends);
+
+    return {
+      data: {
+        Comments: commentSends,
+      },
+      message: '게시물 확대 성공',
     };
   }
 }
