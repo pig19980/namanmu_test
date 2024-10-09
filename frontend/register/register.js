@@ -27,24 +27,23 @@ function closeRegister() {
   registerModal.style.display = "none";
 }
 
-
 // 회원가입 버튼 누른 후
 
 function userRegister() {
   const userRegisterId = document.querySelector(".user-register-id");
-  const userRegisterPassWord = document.querySelector(".user-register-password");
-  fetch("/users/register", {
+  const userRegisterPassWord = document.querySelector(
+    ".user-register-password"
+  );
+  fetch("https://jsonplaceholder.typicode.com/posts", {
     method: "POST",
     headers: {
-      'Content-Type' : 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       username: userRegisterId.value,
       password: userRegisterPassWord.value,
-    })
+    }),
   })
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(error => console.log('Error', error));
+    .then((res) => res.json())
+    .then((data) => alert(data.message));
 }
-
