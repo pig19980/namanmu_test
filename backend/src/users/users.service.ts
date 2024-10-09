@@ -41,4 +41,8 @@ export class UsersService {
     }
     return user;
   }
+
+  async getUserName(userId: number): Promise<string> {
+    return this.users[userId].username;
+  }
 }
