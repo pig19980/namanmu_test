@@ -34,7 +34,7 @@ function userRegister() {
   const userRegisterPassWord = document.querySelector(
     ".user-register-password"
   );
-  fetch("https://jsonplaceholder.typicode.com/posts", {
+  fetch("/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
