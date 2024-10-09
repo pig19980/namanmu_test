@@ -24,3 +24,29 @@ function closeLogin() {
 
 openModal.addEventListener("click", openLogin);
 
+const loginButton = document.querySelector(".btn-login");
+
+function userLogin() {
+  const userId = document.querySelector(".userid");
+  const userPassWord = document.querySelector(".password");
+  
+  fetch("users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: userId.value,
+      password: userPassWord.value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.jwtToken) {
+        localStorage.setItem('jwtToken', data.jwtToken);
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    });
+}
