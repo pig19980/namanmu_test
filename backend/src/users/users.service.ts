@@ -30,17 +30,17 @@ export class UsersService {
     return this.userRepository.findOne({ where: { username } });
   }
 
-  async findUserBeforeLogin(findUserBeforeLoginDto: FindUserBeforeLoginDto): Promise<User> {
-    const user: User = await this.find(findUserBeforeLoginDto.username);
-    if (!user || !(await bcrpyt.compare(findUserBeforeLoginDto.password, user.hashedPassword))) {
+  async findUserBeforeLogin({ username, password }: FindUserBeforeLoginDto): Promise<User> {
+    const user: User = await this.find(username);
+    if (!user || !(await bcrpyt.compare(password, user.hashedPassword))) {
       return null;
     }
     return user;
   }
 
-  async findUserAfterLogin(findUserAfterLogin: FindUserAfterLoginDto): Promise<User> {
-    const user: User = await this.find(findUserAfterLogin.username);
-    if (!user || user.hashedPassword !== findUserAfterLogin.hashedPassword) {
+  async findUserAfterLogin({ username, hashedPassword }: FindUserAfterLoginDto): Promise<User> {
+    const user: User = await this.find(username);
+    if (!user || user.hashedPassword !== hashedPassword) {
       return null;
     }
     return user;

@@ -14,7 +14,6 @@ export class UsersController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
-    console.log('regi start');
     await this.usersService.create(createUserDto);
     return {
       message: '회원가입 성공',
