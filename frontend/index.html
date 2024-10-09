@@ -27,87 +27,34 @@
     <hr>
 
     <div class="card">
-        <div class="post-card">
-            <div class="post-text">
-                <h5>올린사람 닉네임</h5>
-                <h3>제목</h3>
-                <h6>설명</h6>
-            </div>
-            <div class='date'>
-                <h6>2024-10-07</h6>
-                <h6>좋아요 수 13</h6>
-            </div>
-            <div class=img-box>
-                <img src="img/0.jpg" width=100% height=100%>
-            </div>
-        </div>
-        <div class="post-card">
-            <div class="post-text">
-                <h5>날 울린사람 닉네임</h5>
-                <h3>제목</h3>
-                <h6>가만두지 않겠어</h6>
-            </div>
-            <div class='date'>
-                <h6>2024-10-07</h6>
-                <h6>좋아요 수 13</h6>
-            </div>
-            <div class=img-box>
-                <img src="img/0.jpg" width=100% height=100%>
-            </div>
-        </div>
-        <div class="post-card">
-            <div class="post-text">
-                <h5>올린사람 닉네임</h5>
-                <h3>제목</h3>
-                <h6>설명</h6>
-            </div>
-            <div class='date'>
-                <h6>2024-10-07</h6>
-                <h6>좋아요 수 13</h6>
-            </div>
-            <div class=img-box>
-                <img src="img/0.jpg" width=100% height=100%>
-            </div>
-        </div>
-        <div class="post-card">
-            <div class="post-text">
-                <h5>올린사람 닉네임</h5>
-                <h3>제목</h3>
-                <h6>설명</h6>
-            </div>
-            <div class='date'>
-                <h6>2024-10-07</h6>
-                <h6>좋아요 수 13</h6>
-            </div>
-            <div class=img-box>
-                <img src="img/0.jpg" width=100% height=100%>
-            </div>
-        </div>
+
     </div>
     <script src="loginmodal/loginmodal.js"></script>
     <script src="createmodal/createmodal.js"></script>
     <script src="cardmodal/cardmodal.js"></script>
     <script src="register/register.js"></script>
 
-    <!-- <script>
+    <script>
         showArticles();
 
         function showArticles() {
             fetch("/posts")
                 .then((res) => res.json())
                 .then((data) => {
-                    for (let i = 0; i < data.length; i++) {
-                        makeCard(data[i]["createdUsername"], data[i]["title"], data[i]["content"], data[i]["createdAt"], data[i]["likes"], data[i]["imageURL"]);
+                    const posts = data.data.Posts;
+                    //map으로 바꿔보기
+                    for (let i = 0; i < posts.length; i++) {
+                        makeCard(posts[i]["createdUsername"], posts[i]["title"], posts[i]["content"], posts[i]["createdAt"], posts[i]["likes"], posts[i]["imageURL"], posts[i]["id"]);
                     };
-                    alert(data["message"])
+                    console.log(data["message"]);
                 })
                 .catch((error) => {
                     console.log("Error loading Cards :", error);
                 })
         }
 
-        function makeCard(createdUsername, title, content, createdAt, likes, imageURL) {
-            let temp_html = `<div class="post-card">
+        function makeCard(createdUsername, title, content, createdAt, likes, imageURL, card_id) {
+            let temp_html = `<div class="post-card" onclick = openCard(${card_id})>
             <div class="post-text">
                 <h5>${createdUsername}</h5>
                 <h3>${title}</h3>
@@ -120,11 +67,12 @@
             <div class=img-box>
                 <img src="${imageURL}" width=100% height=100%>
             </div>
-        </div>`
+        </div>
+        `
             //메인 페이지에 db에서 받아온 정보로 게시글 생성.
-            document.querySelector(".card").innerHTML = temp_html;
+            document.querySelector(".card").innerHTML += temp_html;
         }
-    </script> -->
+    </script>
 </body>
 
 </html>
