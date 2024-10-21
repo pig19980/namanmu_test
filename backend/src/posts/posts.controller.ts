@@ -26,8 +26,9 @@ import { CommentSend } from 'src/comments/entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 import { CommentsService } from 'src/comments/comments.service';
-import { HttpExceptionFilter } from 'src/http-exception.filter';
+
 import { CustomPipe } from 'src/custom.pipe';
+import { PostsFilter } from './posts.filter';
 
 @Controller('posts')
 export class PostsController {
@@ -38,6 +39,7 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new CustomPipe())
+  @UseFilters(new PostsFilter())
   @Post('create')
   async create(@Body() createPostDto: CreatePostDto, @Req() request: AuthRequest) {
     console.log('start');
@@ -56,7 +58,7 @@ export class PostsController {
   }
 
   @Get()
-  @UseFilters(new HttpExceptionFilter())
+  @UseFilters(new PostsFilter())
   async findAll() {
     try {
       const postSends: PostSend[] = await this.postsService.findAllResponse();
