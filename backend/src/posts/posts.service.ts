@@ -1,4 +1,11 @@
-import { ConflictException, Inject, Injectable, NotImplementedException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotImplementedException,
+} from '@nestjs/common';
 import { _CreatePostDto } from './dto/create-post.dto';
 import { UsersService } from 'src/users/users.service';
 import { Post, PostSend, PostViewSend } from './entities/post.entity';
@@ -21,7 +28,6 @@ export class PostsService {
     const post = this.postRepository.create({ postCreator, title, content, imageURL: `img/${getRandomInt()}.jpg` });
     await this.postRepository.save(post);
 
-    console.log(post);
     return true;
   }
 

@@ -7,6 +7,10 @@ import {
   UseGuards,
   BadRequestException,
   NotImplementedException,
+HttpException,
+  HttpStatus,
+  UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { _CreatePostDto, CreatePostDto } from './dto/create-post.dto';
@@ -22,6 +26,8 @@ import { CommentSend } from 'src/comments/entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 import { CommentsService } from 'src/comments/comments.service';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { CustomPipe } from 'src/custom.pipe';
 
 @Controller('posts')
 export class PostsController {
@@ -31,8 +37,10 @@ export class PostsController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @UsePipes(new CustomPipe())
   @Post('create')
   async create(@Body() createPostDto: CreatePostDto, @Req() request: AuthRequest) {
+    console.log('start');
     const postCreator: User = request.user;
     if (postCreator == null) {
       throw new BadRequestException('옳지 않은 JWT 요청');

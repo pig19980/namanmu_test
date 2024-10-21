@@ -1,9 +1,23 @@
-import { Body, Controller, forwardRef, Inject, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  forwardRef,
+  Get,
+  Inject,
+  Param,
+  ParseBoolPipe,
+  ParseIntPipe,
+  Post,
+  Query,
+  UnauthorizedException,
+  UsePipes,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { FindUserBeforeLoginDto } from './dto/find-user-before-login.dto';
 import { User } from './entities/user.entity';
+import { CustomPipe } from 'src/custom.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -14,6 +28,7 @@ export class UsersController {
   ) {}
 
   @Post('register')
+  @UsePipes(new CustomPipe())
   async register(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
     return {
@@ -36,5 +51,12 @@ export class UsersController {
       },
       message: '로그인 성공',
     };
+  }
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number, @Query('sort', ParseBoolPipe) sort: boolean) {
+    console.log(id, sort);
+    console.log(typeof id === 'number'); // true
+    console.log(typeof sort === 'boolean'); // true
+    return 'This action returns a user';
   }
 }
