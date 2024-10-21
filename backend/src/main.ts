@@ -16,11 +16,11 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      disableErrorMessages: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     disableErrorMessages: true,
+  //   }),
+  // );
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   await app.listen(3000);

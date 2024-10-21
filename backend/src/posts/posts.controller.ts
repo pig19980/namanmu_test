@@ -29,6 +29,7 @@ import { CommentsService } from 'src/comments/comments.service';
 
 import { CustomPipe } from 'src/custom.pipe';
 import { PostsFilter } from './posts.filter';
+import { PostsPipe } from './posts.pipe';
 
 @Controller('posts')
 export class PostsController {
@@ -38,7 +39,7 @@ export class PostsController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @UsePipes(new CustomPipe())
+  @UsePipes(new PostsPipe())
   @UseFilters(new PostsFilter())
   @Post('create')
   async create(@Body() createPostDto: CreatePostDto, @Req() request: AuthRequest) {
