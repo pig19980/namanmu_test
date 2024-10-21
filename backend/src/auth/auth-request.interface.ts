@@ -1,6 +1,8 @@
+import { isString } from 'class-validator';
 import { Request } from 'express';
 import { User } from 'src/users/entities/user.entity';
 
 export interface AuthRequest extends Request {
   user: User;
+  asdf: number;
 }

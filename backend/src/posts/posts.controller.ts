@@ -7,7 +7,7 @@ import {
   UseGuards,
   BadRequestException,
   NotImplementedException,
-HttpException,
+  HttpException,
   HttpStatus,
   UseFilters,
   UsePipes,
@@ -56,16 +56,40 @@ export class PostsController {
   }
 
   @Get()
+  @UseFilters(new HttpExceptionFilter())
   async findAll() {
-    const postSends: PostSend[] = await this.postsService.findAllResponse();
-    console.log(postSends);
+    try {
+      const postSends: PostSend[] = await this.postsService.findAllResponse();
 
-    return {
-      data: {
-        Posts: postSends,
-      },
-      message: '게시물 조회 성공',
-    };
+      return {
+        data: {
+          Posts: postSends,
+        },
+        message: '게시물 조회 성공',
+      };
+    } catch (error) {
+      const newErr: Error = new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+      throw newErr;
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Post('view')
